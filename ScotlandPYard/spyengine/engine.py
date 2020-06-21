@@ -23,7 +23,11 @@ class GameEngine(QObject):
         self.maxMoves = maxMoves
         self.revealedstates = revealedstates
         # self.players = [HumanDetective(self) for i in range(num_detectives)]
-        self.players = [StupidAIDetective(self), StupidAIDetective(self), StupidAIDetective(self)]
+        self.players = [
+            StupidAIDetective(self),
+            StupidAIDetective(self),
+            StupidAIDetective(self),
+        ]
         self.turn = 0
         self.game_over = False
         self.mrxMoves = []
@@ -35,7 +39,9 @@ class GameEngine(QObject):
             detective.set_location(chosen)
 
         self.mrx = StupidAIMrX(self, num_players=num_detectives)
-        self.mrx.set_location(choice(list(set(self.graph.nodes()).difference(taken_locations))))
+        self.mrx.set_location(
+            choice(list(set(self.graph.nodes()).difference(taken_locations)))
+        )
         self.players.append(self.mrx)
         self.game_state_changed.connect(self.check_game_state)
 
@@ -43,14 +49,14 @@ class GameEngine(QObject):
         state = {
             "players_state": [player.get_info() for player in self.players],
             "turn": self.turn,
-            "mrxmoves": self.mrxMoves
+            "mrxmoves": self.mrxMoves,
         }
         return state
 
     def check_game_state(self):
-        '''
+        """
         Checks if the game is over or not
-        '''
+        """
         for p in self.players[:-1]:
             if p.location == self.mrx.location:
                 self.game_over = True
@@ -70,10 +76,11 @@ class GameEngine(QObject):
             if p.name == player_name:
                 player = p
                 break
-        if player is None: return []
+        if player is None:
+            return []
 
         valid_nodes = []
-        for u, v, tick in self.graph.edges(nbunch=player.location, data='ticket'):
+        for u, v, tick in self.graph.edges(nbunch=player.location, data="ticket"):
             if tick == ticket and player.tickets[ticket] > 0:
                 valid_nodes.append(v)
 

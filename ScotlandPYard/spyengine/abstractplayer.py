@@ -17,11 +17,15 @@ class AbstractPlayer(ABC):
     @abstractmethod
     def play_next(self):
         """perform next action by player"""
-        NotImplementedError("Class {} doesn't implement play_next()".format(self.__class__.__name__))
+        NotImplementedError(
+            "Class {} doesn't implement play_next()".format(self.__class__.__name__)
+        )
 
     @abstractmethod
     def get_role(self):
-        NotImplementedError("Class {} doesn't implement get_role()".format(self.__class__.__name__))
+        NotImplementedError(
+            "Class {} doesn't implement get_role()".format(self.__class__.__name__)
+        )
 
     def set_location(self, location):
         self.location = location
@@ -34,6 +38,6 @@ class AbstractPlayer(ABC):
             "tickets": self.tickets,
             "location": self.location,
             "role": self.get_role(),
-            "icon": self.icon
+            "icon": self.icon,
         }
         return stats

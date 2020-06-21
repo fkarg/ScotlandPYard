@@ -55,7 +55,7 @@ class Edge(QGraphicsItem):
 
     Type = QGraphicsItem.UserType + 2
 
-    def __init__(self, sourceNode, destNode, path, node_dict, ticket='Taxi'):
+    def __init__(self, sourceNode, destNode, path, node_dict, ticket="Taxi"):
         super(Edge, self).__init__()
 
         assert len(path) >= 2
@@ -79,7 +79,11 @@ class Edge(QGraphicsItem):
         self.setZValue(2)
 
         self.brush = {"Taxi": Qt.yellow, "Underground": Qt.red, "Bus": Qt.blue}
-        self.line_style = {"Taxi": Qt.SolidLine, "Underground": Qt.DashDotDotLine, "Bus": Qt.DashLine}
+        self.line_style = {
+            "Taxi": Qt.SolidLine,
+            "Underground": Qt.DashDotDotLine,
+            "Bus": Qt.DashLine,
+        }
 
         self.control_points = [sourceNode.pos()]
         for p in path[1:-1]:
@@ -108,15 +112,15 @@ class Edge(QGraphicsItem):
         if not self.source or not self.dest:
             return
 
-        line = QLineF(self.mapFromItem(self.source, 0, 0),
-                      self.mapFromItem(self.dest, 0, 0))
+        line = QLineF(
+            self.mapFromItem(self.source, 0, 0), self.mapFromItem(self.dest, 0, 0)
+        )
         length = line.length()
 
         self.prepareGeometryChange()
 
         if length > 20.0:
-            edgeOffset = QPointF((line.dx() * 10) / length,
-                                 (line.dy() * 10) / length)
+            edgeOffset = QPointF((line.dx() * 10) / length, (line.dy() * 10) / length)
 
             self.sourcePoint = line.p1() + edgeOffset
             self.destPoint = line.p2() - edgeOffset
@@ -131,18 +135,31 @@ class Edge(QGraphicsItem):
         penWidth = 1.0
         extra = (penWidth + self.arrowSize) / 2.0
 
-        return QRectF(self.sourcePoint, QSizeF(self.destPoint.x() - self.sourcePoint.x(),
-                                               self.destPoint.y() - self.sourcePoint.y())).normalized().adjusted(-extra,
-                                                                                                                 -extra,
-                                                                                                                 extra,
-                                                                                                                 extra)
+        return (
+            QRectF(
+                self.sourcePoint,
+                QSizeF(
+                    self.destPoint.x() - self.sourcePoint.x(),
+                    self.destPoint.y() - self.sourcePoint.y(),
+                ),
+            )
+            .normalized()
+            .adjusted(-extra, -extra, extra, extra)
+        )
 
     def paint(self, painter, option, widget):
         if not self.source or not self.dest:
             return
 
-        painter.setPen(QPen(self.brush[self.ticket], 1, self.line_style[self.ticket], Qt.RoundCap,
-                            Qt.RoundJoin))
+        painter.setPen(
+            QPen(
+                self.brush[self.ticket],
+                1,
+                self.line_style[self.ticket],
+                Qt.RoundCap,
+                Qt.RoundJoin,
+            )
+        )
         count = len(self.control_points)
         path = QPainterPath(self.sourcePoint)
 
@@ -161,7 +178,8 @@ class Edge(QGraphicsItem):
             ptx = [p.x() for p in self.control_points]
             pty = [p.y() for p in self.control_points]
 
-            if sum(ptx) == 0 or sum(pty) == 0: return  # nodes are not yet placed
+            if sum(ptx) == 0 or sum(pty) == 0:
+                return  # nodes are not yet placed
 
             k = 3 if count > 4 else 2
             try:
@@ -254,8 +272,12 @@ class Node(QGraphicsItem):
 
         sceneRect = self.scene().sceneRect()
         self.newPos = self.pos() + QPointF(xvel, yvel)
-        self.newPos.setX(min(max(self.newPos.x(), sceneRect.left() + 10), sceneRect.right() - 10))
-        self.newPos.setY(min(max(self.newPos.y(), sceneRect.top() + 10), sceneRect.bottom() - 10))
+        self.newPos.setX(
+            min(max(self.newPos.x(), sceneRect.left() + 10), sceneRect.right() - 10)
+        )
+        self.newPos.setY(
+            min(max(self.newPos.y(), sceneRect.top() + 10), sceneRect.bottom() - 10)
+        )
 
     def set_highlight(self, hl):
         self.highlight = hl
@@ -336,7 +358,9 @@ class Node(QGraphicsItem):
         painter.setPen(blackpen)
         font.setPointSize(7)
         painter.setFont(font)
-        painter.drawText(int(-w / 2), int(-h / 2), int(w), int(h), Qt.AlignCenter, self.nodeid)
+        painter.drawText(
+            int(-w / 2), int(-h / 2), int(w), int(h), Qt.AlignCenter, self.nodeid
+        )
 
     def itemChange(self, change, value):
         # if change == QGraphicsItem.ItemPositionHasChanged:

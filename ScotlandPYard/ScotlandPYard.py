@@ -1,4 +1,5 @@
 import os.path
+
 # from PyQt5.QtOpenGL import *
 import pkg_resources
 from PyQt5.QtGui import *
@@ -10,11 +11,12 @@ from ScotlandPYard.spymap import SPYMap
 
 
 class ScotlandPYardGame(QMainWindow):
-
     def __init__(self):
 
         super(ScotlandPYardGame, self).__init__()
-        self.resourcepath = pkg_resources.resource_filename("ScotlandPYard.resources", "images")
+        self.resourcepath = pkg_resources.resource_filename(
+            "ScotlandPYard.resources", "images"
+        )
         iconpath = os.path.join(self.resourcepath, "icon.png")
         self.setWindowIcon(QIcon(iconpath))
         self.canvas = QLabel()
@@ -25,7 +27,7 @@ class ScotlandPYardGame(QMainWindow):
 
         self.revealedstates = [2, 8, 14, 20, 29]
 
-        self.spymap = SPYMap(map_name='map3')
+        self.spymap = SPYMap(map_name="map3")
 
         self.engine = None
         self.game_state = None
@@ -41,7 +43,7 @@ class ScotlandPYardGame(QMainWindow):
 
         self.setGeometry(100, 100, 800, 800)
         self.center()
-        self.setWindowTitle('S. pyard')
+        self.setWindowTitle("S. pyard")
 
         self.statusBar()
 
@@ -77,17 +79,24 @@ class ScotlandPYardGame(QMainWindow):
             for i, layout in enumerate(self.playersDashHBox.findChildren(QGroupBox)):
                 layout.setEnabled(turn == i)
 
-            players_by_name = dict([[p['name'], p] for p in self.game_state['players_state']])
+            players_by_name = dict(
+                [[p["name"], p] for p in self.game_state["players_state"]]
+            )
             for b in self.player_ticket_buttons:
-                p = players_by_name[b.property('player_name')]
-                t = b.property('ticket')
+                p = players_by_name[b.property("player_name")]
+                t = b.property("ticket")
                 t_num = p["tickets"][t]
                 b.setText("{} ({})".format(t, t_num))
                 b.update()
             self.playersDashHBox.update()
 
     def initGameEngine(self):
-        self.engine = GameEngine(spymap=self.spymap, num_detectives=4, maxMoves=30, revealedstates=self.revealedstates)
+        self.engine = GameEngine(
+            spymap=self.spymap,
+            num_detectives=4,
+            maxMoves=30,
+            revealedstates=self.revealedstates,
+        )
         self.game_state = self.engine.get_game_state()
         self.spymap.setEngine(self.engine)
         self.engine.game_state_changed.connect(self.refresh_game_state)
@@ -106,7 +115,7 @@ class ScotlandPYardGame(QMainWindow):
 
     #       button.clicked.connect(self.submitCommand)
     def updateMrXMoves(self):
-        moves = self.game_state['mrxmoves']
+        moves = self.game_state["mrxmoves"]
         for i, btn in enumerate(self.mrXMovesGroupBox.findChildren(QPushButton)):
             if i >= len(moves):
                 break
@@ -139,7 +148,7 @@ class ScotlandPYardGame(QMainWindow):
             button.setObjectName(k)
             button.setStyleSheet(stylesheet[k])
             button.clicked.connect(self.submitCommand)
-            button.setProperty("player_name", player['name'])
+            button.setProperty("player_name", player["name"])
             button.setProperty("ticket", k)
             self.player_ticket_buttons.append(button)
             layout.addWidget(button)
@@ -168,8 +177,12 @@ class ScotlandPYardGame(QMainWindow):
     def submitCommand(self):
         sender = self.sender()
         player = sender.property("player_name")
-        self.statusBar().showMessage(sender.objectName() + ": " + player + ' was pressed')
-        valid_nodes = self.engine.get_valid_nodes(player_name=player, ticket=sender.objectName())
+        self.statusBar().showMessage(
+            sender.objectName() + ": " + player + " was pressed"
+        )
+        valid_nodes = self.engine.get_valid_nodes(
+            player_name=player, ticket=sender.objectName()
+        )
         self.spymap.highlight_nodes(valid_nodes, ticket=sender.objectName())
 
     def game_over(self, msg):
@@ -178,6 +191,7 @@ class ScotlandPYardGame(QMainWindow):
 
 def main():
     import sys
+
     app = QApplication(sys.argv)
     app.aboutToQuit.connect(app.deleteLater)
     app.setStyle(QStyleFactory.create("gtk"))

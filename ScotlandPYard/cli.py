@@ -5,6 +5,7 @@
 import click
 import ScotlandPYard.ScotlandPYard as spy
 
+
 @click.command()
 def main(args=None):
     """Console script for ScotlandPYard."""

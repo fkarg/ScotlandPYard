@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-base = ''' QPushButton {{
+base = """ QPushButton {{
               background-color: {};
               color: {};
               border-style: outset; 
@@ -20,11 +20,11 @@ base = ''' QPushButton {{
               background-color:gray;
             }}
            
-'''
+"""
 stylesheet = {
-    'Underground': base.format("red", "black", "darkred"),
-    'Taxi': base.format("yellow", "black", "darkgoldenrod"),
-    'Bus': base.format("blue", "black", "darkblue"),
+    "Underground": base.format("red", "black", "darkred"),
+    "Taxi": base.format("yellow", "black", "darkgoldenrod"),
+    "Bus": base.format("blue", "black", "darkblue"),
     "2x": base.format("orange", "black", "darkorange"),
-    "BlackTicket": base.format("black", "white", "gray")
+    "BlackTicket": base.format("black", "white", "gray"),
 }

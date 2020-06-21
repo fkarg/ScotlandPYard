@@ -21,11 +21,7 @@ class AbstractDetective(AbstractPlayer):
         self.icon = QGraphicsSvgItem(iconpath)
         self.icon.setScale(0.05)
         self.name = name
-        self.tickets = {
-            "Bus": 8,
-            "Taxi": 10,
-            "Underground": 4
-        }
+        self.tickets = {"Bus": 8, "Taxi": 10, "Underground": 4}
 
     def get_role(self):
         return "detective"

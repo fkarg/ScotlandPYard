@@ -15,7 +15,9 @@ from .spyengine.maputils import get_map_graph
 class SPYMap(QGraphicsView):
     def __init__(self, map_name):
         super(SPYMap, self).__init__()
-        self.resourcepath = pkg_resources.resource_filename("ScotlandPYard.resources", "images")
+        self.resourcepath = pkg_resources.resource_filename(
+            "ScotlandPYard.resources", "images"
+        )
         self.mapname = map_name + ".jpg"
         self.highlighted_nodes = []
         self.turn_player_location = None
@@ -52,7 +54,9 @@ class SPYMap(QGraphicsView):
 
         for e in self.graph.edges(data=True):
             src, dst, edgedata = e
-            self.scene().addItem(Edge(src, dst, edgedata['path'], node_dict, edgedata["ticket"]))
+            self.scene().addItem(
+                Edge(src, dst, edgedata["path"], node_dict, edgedata["ticket"])
+            )
 
         for n in self.graph.nodes():
             n.setPos(*self.pos[n])
@@ -66,7 +70,12 @@ class SPYMap(QGraphicsView):
         self.scaleView(math.pow(2.0, -event.angleDelta().y() / 240.0))
 
     def scaleView(self, scaleFactor):
-        factor = self.transform().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width()
+        factor = (
+            self.transform()
+            .scale(scaleFactor, scaleFactor)
+            .mapRect(QRectF(0, 0, 1, 1))
+            .width()
+        )
 
         if factor < 0.07 or factor > 100:
             return
@@ -83,7 +92,9 @@ class SPYMap(QGraphicsView):
 
     @profile
     def update_nodes(self):
-        pos_mat = np.array([[-item.pos().x(), -item.pos().y()] for item in self.graph.nodes()])
+        pos_mat = np.array(
+            [[-item.pos().x(), -item.pos().y()] for item in self.graph.nodes()]
+        )
 
         for node in self.graph.nodes():
             node.calculateForces(pos_mat)
@@ -115,7 +126,9 @@ class SPYMap(QGraphicsView):
         loc = self.engine.players[self.engine.turn].location
         self.set_player_turn(loc)
 
-        self.set_player_locations([(p.name, p.location) for p in self.engine.players[:-1]])
+        self.set_player_locations(
+            [(p.name, p.location) for p in self.engine.players[:-1]]
+        )
 
     def set_player_turn(self, node):
         self.unhighlight_nodes()
@@ -136,8 +149,7 @@ class SPYMap(QGraphicsView):
         for name, node in locs:
             node.set_has_player(True)
             node.update()
-            self.icons[name].setPos(node.pos().x() - margin,
-                                    node.pos().y() - margin)
+            self.icons[name].setPos(node.pos().x() - margin, node.pos().y() - margin)
 
         self.players_locations = locs
 

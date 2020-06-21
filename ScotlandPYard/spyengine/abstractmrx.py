@@ -11,7 +11,7 @@ class AbstractMrX(AbstractPlayer):
             "Taxi": 4,
             "Underground": 3,
             "2x": 2,
-            "BlackTicket": num_players
+            "BlackTicket": num_players,
         }
 
     def get_role(self):

@@ -8,7 +8,9 @@ class StupidAIDetective(AIDetective):
         moves = []
         for t in self.tickets.keys():
             if self.tickets[t] > 0:
-                moves.extend([(n, t) for n in self.engine.get_valid_nodes(self.name, t)])
+                moves.extend(
+                    [(n, t) for n in self.engine.get_valid_nodes(self.name, t)]
+                )
 
         # print("Stupid AI: mesa thinks one of those is good")
         if len(moves) > 0:
